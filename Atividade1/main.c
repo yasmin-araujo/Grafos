@@ -8,7 +8,6 @@ int main()
     int u, v;   // Variáveis auxiliares para ler valores dos vértices
     int q;      // Número de operações a serem executadas
     int q1;     // Operação a ser realizada
-    int v1, v2; //
 
     // Leitura de num de vértices e arestas
     scanf("%d", &n);

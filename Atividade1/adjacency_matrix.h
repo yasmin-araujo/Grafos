@@ -9,7 +9,7 @@ void insert_edge(AdjMatrix* mat, int vertex1, int vertex2);
 
 void remove_edge(AdjMatrix* mat, int vertex1, int vertex2);
 
-void show_adjacency_matrix();
+void show_adjacency_matrix(AdjMatrix *mat);
 
 void delete_graph(AdjMatrix *mat);
 
