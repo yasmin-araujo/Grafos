@@ -27,6 +27,7 @@ struct list_head
 {
     ListEdge *first;
     ListEdge *last;
+    int size;
 };
 
 /**
@@ -59,6 +60,7 @@ AdjList *create_graph(int num_vertex)
         ListHead *head = (ListHead *)malloc(sizeof(ListHead));
         head->first = NULL;
         head->last = NULL;
+        head->size = 0;
         lst->list[i] = head;
     }
 
@@ -177,6 +179,26 @@ void remove_edge(AdjList *lst, int vertex1, int vertex2)
     //     free(delete);
     // }
     // delete = NULL;
+}
+
+int get_value(AdjList *lst, int vertex, int index)
+{
+    int value = -1;
+    
+    // Checa se o valor pedido existe 
+    if(lst->list[vertex]->size == 0 || lst->list[vertex]->size <= index) return value;
+
+    ListEdge *runner = lst->list[vertex]->first;
+
+    while(index > 0)
+    {
+        runner = runner->next;
+        index--;
+    }
+
+    value = runner->value;
+
+    return value;
 }
 
 /**

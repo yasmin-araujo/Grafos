@@ -13,6 +13,8 @@ void insert_edge(AdjList* lst, int vertex1, int vertex2);
 
 void remove_edge(AdjList* lst, int vertex1, int vertex2);
 
+int get_value(AdjList *lst, int vertex, int index);
+
 void show_adjacency_list(AdjList *lst);
 
 void delete_graph(AdjList *lst);
