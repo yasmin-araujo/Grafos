@@ -1,9 +1,9 @@
-// TAD Gafos - Lista de Adjacências
-// ADT Graph - Adjacency List
+// TAD Gafos - Lista de Adjacências para Grafo Direcionado
+// ADT Graph - Adjacency List for Directed Graph
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "adjacency_list.h"
+#include "directed_adjacency_list.h"
 
 /**
  * Struct para lista de adjacências
@@ -11,7 +11,7 @@
  * num_vertex: Número de vértices do gŕafico
  * list: Ponteiro pra lista
 */
-struct adjacency_list
+struct dir_adjacency_list
 {
     int num_vertex;
     ListHead **list;
@@ -48,9 +48,9 @@ struct list_edge
  * @param num_vertex: Número de vértices do grafo
  * @return lst: Ponteiro pra estrutura alocada na heap
  */
-AdjList *create_graph(int num_vertex)
+DirAdjList *create_graph(int num_vertex)
 {
-    AdjList *lst = (AdjList *)malloc(sizeof(AdjList));
+    DirAdjList *lst = (DirAdjList *)malloc(sizeof(DirAdjList));
     lst->list = (ListHead **)malloc(num_vertex * sizeof(ListHead *));
     lst->num_vertex = num_vertex;
 
@@ -68,13 +68,13 @@ AdjList *create_graph(int num_vertex)
 }
 
 /** 
- * Cria uma aresta entre dois vértices do grafo
+ * Cria uma aresta entre dois vértices do grafo, sendo do primeiro em direção ao segundo
  * 
  * @param lst: Ponteiro pra estrutura que contém a lista
  * @param vertex1: Primeiro vértice
  * @param vertex2: Segundo vértice
 */
-void insert_edge(AdjList *lst, int vertex1, int vertex2)
+void insert_edge(DirAdjList *lst, int vertex1, int vertex2)
 {
     // Confere se aresta já existe
     ListEdge *runner = lst->list[vertex1]->first;
@@ -99,32 +99,17 @@ void insert_edge(AdjList *lst, int vertex1, int vertex2)
     }
 
     lst->list[vertex1]->last = edge1;
-
-    // Insere na segunda lista
-    // ListEdge *edge2 = (ListEdge *)malloc(sizeof(ListEdge));
-    // edge2->value = vertex1;
-    // edge2->next = NULL;
-
-    // if (lst->list[vertex2]->first == NULL)
-    // {
-    //     lst->list[vertex2]->first = edge2;
-    // }
-    // else
-    // {
-    //     lst->list[vertex2]->last->next = edge2;
-    // }
-
-    // lst->list[vertex2]->last = edge2;
+    lst->list[vertex1]->size++;
 }
 
 /**
- * Remove uma aresta entre 2 vértices do grafo
+ * Remove uma aresta entre 2 vértices do grafo, sendo do primeiro em direção ao segundo
  * 
  * @param lst: Ponteiro pra estrutura que contém a lista
  * @param vertex1: Primeiro vértice
  * @param vertex2: Segundo vértice
 */
-void remove_edge(AdjList *lst, int vertex1, int vertex2)
+void remove_edge(DirAdjList *lst, int vertex1, int vertex2)
 {
     // Remove da primeira lista
     ListEdge *delete = NULL;
@@ -154,34 +139,18 @@ void remove_edge(AdjList *lst, int vertex1, int vertex2)
         runner->next = delete->next;
         free(delete);
     }
-
-    // // Remove da segunda lista
-    // runner = lst->list[vertex2]->first;
-
-    // // Se nó a ser retirado é o primeiro
-    // if (runner->value == vertex1)
-    // {
-    //     lst->list[vertex2]->first = runner->next;
-    //     free(runner);
-    // }
-    // else
-    // {
-    //     // Procura nó com valor certo e armazena o anterior
-    //     while (runner->next != NULL && runner->next->value != vertex1)
-    //         runner = runner->next;
-
-    //     // Se não achou
-    //     if (runner->next == NULL)
-    //         return;
-
-    //     delete = runner->next;
-    //     runner->next = delete->next;
-    //     free(delete);
-    // }
-    // delete = NULL;
+    lst->list[vertex1]->size--;
 }
 
-int get_value(AdjList *lst, int vertex, int index)
+/**
+ * Retorna um valor da lista de adjacências
+ * 
+ * @param lst: Ponteiro pra estrutura que contém a lista
+ * @param vertex: Vértice a ter adjacências checadas
+ * @param index: Índice do valor a ser retornado
+ * @return value: Valor obtido da lista do vertex no index recebido
+*/
+int get_value(DirAdjList *lst, int vertex, int index)
 {
     int value = -1;
     
@@ -206,7 +175,7 @@ int get_value(AdjList *lst, int vertex, int index)
  * 
  * @param lst: Ponteiro pra estrutura que contém a lista
 */
-void show_adjacency_list(AdjList *lst)
+void show_adjacency_list(DirAdjList *lst)
 {
     ListEdge *runner;
     for (int i = 0; i < lst->num_vertex; i++)
@@ -242,7 +211,7 @@ void delete_edges(ListEdge *edge)
  * 
  * @param lst: Ponteiro pra estrutura que contém a lista
 */
-void delete_graph(AdjList *lst)
+void delete_graph(DirAdjList *lst)
 {
     for (int i = 0; i < lst->num_vertex; i++)
     {
