@@ -4,19 +4,19 @@
 #define boolean int
 #define TRUE 1
 #define FALSE 0
-#define ERRO -1
+#define ERROR -1
 
 typedef struct queue_ QUEUE;
-typedef struct no_ no;
+typedef struct node_ node;
 
 QUEUE *create_queue();
 boolean queue_push(QUEUE *f, int item);
 int queue_pop(QUEUE *f);
 int queue_begin(QUEUE *f);
-int fila_fim(QUEUE *f);
-int fila_tamanho(QUEUE *f);
+int queue_end(QUEUE *f);
+int queue_size(QUEUE *f);
 boolean queue_empty(QUEUE *f);
-void fila_imprime(QUEUE *f);
-void fila_apagar(QUEUE **f);
+void queue_show(QUEUE *f);
+void queue_delete(QUEUE **f);
 
 #endif

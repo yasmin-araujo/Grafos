@@ -4,52 +4,53 @@
 
 struct queue_
 {
-    no *inicio;
-    no *fim;
-    int tam;
+    node *begin;
+    node *end;
+    int size;
 };
 
-struct no_
+struct node_
 {
     int item;
-    no *prox;
+    node *next;
 };
 
 QUEUE *create_queue()
 {
-    QUEUE *fila = (QUEUE *)malloc(sizeof(QUEUE));
-    if (fila == NULL)
+    QUEUE *queue = (QUEUE *)malloc(sizeof(QUEUE));
+    if (queue == NULL)
         printf("\tNão foi possível alocar fila !");
 
     else
     {
-        fila->inicio = NULL;
-        fila->fim = NULL;
-        fila->tam = 0;
+        queue->begin = NULL;
+        queue->end = NULL;
+        queue->size = 0;
     }
 
-    return fila;
+    return queue;
 }
 
 boolean queue_push(QUEUE *f, int item)
 {
     if (f != NULL)
-    {
-        no *novo = (no *)malloc(sizeof(no));
-        novo->item = item;
-        novo->prox = NULL;
-        if (f->tam == 0) //primeiro da fila
+    {        
+        node *new = (node *)malloc(sizeof(node));
+        new->item = item;
+        new->next = NULL;
+
+        if (f->size == 0) // Primeiro da fila
         {
-            f->inicio = novo;
-            f->fim = novo;
+            f->begin = new;
+            f->end = new;
         }
         else
         {
-            f->fim->prox = novo;
-            f->fim = novo;
+            f->end->next = new;
+            f->end = new;
         }
 
-        f->tam++;
+        f->size++;
         return TRUE;
     }
     return FALSE;
@@ -59,17 +60,19 @@ int queue_pop(QUEUE *f)
 {
     if (f != NULL && !queue_empty(f))
     {
-        f->tam--;
+        f->size--;
 
-        no *aux = (no *)malloc(sizeof(no));
-        aux = f->inicio;       //aux é o que vai sair
-        f->inicio = aux->prox; //inicio da fila alterado
-        if (f->fim == aux)     //se for o ultimo item da lista
-            f->fim = NULL;
+        node *aux = (node *)malloc(sizeof(node));
+        aux = f->begin;       // Aux recebe nó a ser retirado que vai sair
+        f->begin = aux->next; // Altera inicio da fila
+
+        // Se for o último item da lista
+        if (f->end == aux)     
+            f->end = NULL;
 
         int item = aux->item;
 
-        aux->prox = NULL;
+        aux->next = NULL;
         aux->item = -1;
         free(aux);
         aux = NULL;
@@ -83,24 +86,24 @@ int queue_begin(QUEUE *f)
 {
     if (f != NULL && !queue_empty(f))
     {
-        return f->inicio->item;
+        return f->begin->item;
     }
     return -1;
 }
 
-int fila_fim(QUEUE *f)
+int queue_end(QUEUE *f)
 {
     if (f != NULL && !queue_empty(f))
     {
-        return f->fim->item;
+        return f->end->item;
     }
     return -1;
 }
 
-int fila_tamanho(QUEUE *f)
+int queue_size(QUEUE *f)
 {
     if (f != NULL)
-        return f->tam;
+        return f->size;
     else
         return 0;
 }
@@ -108,42 +111,42 @@ int fila_tamanho(QUEUE *f)
 boolean queue_empty(QUEUE *f)
 {
     if (f == NULL)
-        return ERRO;
-    if (f->tam == 0)
+        return ERROR;
+    if (f->size == 0)
         return TRUE;
     else
         return FALSE;
 }
 
-//imprime os itens da fila do inicio ao fim
-void fila_imprime(QUEUE *f)
+// Imprime os itens da fila do inicio ao fim
+void queue_show(QUEUE *f)
 {
     if (f == NULL || queue_empty(f))
         return;
-    no *n = f->inicio;
+    node *n = f->begin;
     while (n != NULL)
     {
         printf(" %d ", n->item);
-        n = n->prox;
+        n = n->next;
     }
     printf("\n");
 }
 
-void fila_apagar(QUEUE **f)
+void queue_delete(QUEUE **f)
 {
     while (!queue_empty(*f))
     {
         if (*f != NULL)
         {
-            (*f)->tam--;
+            (*f)->size--;
 
-            no *aux = (no *)malloc(sizeof(no));
-            aux = (*f)->inicio;       //aux é o que vai sair
-            (*f)->inicio = aux->prox; //inicio da fila alterado
-            if ((*f)->fim == aux)     //se for o ultimo item da lista
-                (*f)->fim = NULL;
+            node *aux = (node *)malloc(sizeof(node));
+            aux = (*f)->begin;       //aux é o que vai sair
+            (*f)->begin = aux->next; //inicio da fila alterado
+            if ((*f)->end == aux)     //se for o ultimo item da lista
+                (*f)->end = NULL;
 
-            aux->prox = NULL;
+            aux->next = NULL;
             aux->item = -1;
             free(aux);
             aux = NULL;
