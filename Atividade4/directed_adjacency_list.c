@@ -194,6 +194,14 @@ int get_value(DirAdjList *lst, int vertex, int index)
     return value;
 }
 
+/**
+ * Retorna um tempo de voo da lista de adjacências
+ * 
+ * @param lst: Ponteiro pra estrutura que contém a lista
+ * @param vertex: Vértice a ter adjacências checadas
+ * @param index: Índice do valor a ser retornado
+ * @return flight_time: Valor de tempo de voo obtido da lista do vertex no index recebido
+*/
 int get_flight_time(DirAdjList *lst, int vertex, int index)
 {
     int flight_time = -1;
@@ -215,6 +223,14 @@ int get_flight_time(DirAdjList *lst, int vertex, int index)
     return flight_time;
 }
 
+/**
+ * Retorna um preço da lista de adjacências
+ * 
+ * @param lst: Ponteiro pra estrutura que contém a lista
+ * @param vertex: Vértice a ter adjacências checadas
+ * @param index: Índice do valor a ser retornado
+ * @return price: Preço obtido da lista do vertex no index recebido
+*/
 int get_price(DirAdjList *lst, int vertex, int index)
 {
     int price = -1;
