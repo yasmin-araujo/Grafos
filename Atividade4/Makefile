@@ -17,4 +17,5 @@ zip:
 	zip atv4 main.c directed_adjacency_list.c directed_adjacency_list.h Makefile
 
 debug:
-	valgrind ./program -v < teste.txt
+	valgrind --track-origins=yes ./program < teste.txt
+	# -v -s --track-origins=yes --leak-check=full
