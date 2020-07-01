@@ -1,16 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "directed_adjacency_list.h"
-#include <limits.h>
-// #define INT_MAX 5000
+#define INT_MAX __INT_MAX__
 
-// Retorna cidade não processada com menor custo
-int min(int *time_cost, int n, int *processed)
+/**
+ * Função para descobrir próximo vértice a ser processado
+ * 
+ * @param time_cost: Array com os custos de tempo para cada cidade
+ * @param n: Número total de cidades
+ * @param processed: Array marcando quais vértices já foram processados
+ * @return city: Vértice não processado com menor custo
+*/
+int min_cost(int *time_cost, int n, int *processed)
 {
     int current_cost = INT_MAX;
     int city = -1;
     for (int i = 0; i < n; i++)
     {
+        // Checa se vértice ainda não foi processado e tem um custo menor do que o current_cost
         if (processed[i] == 0 && time_cost[i] < current_cost)
         {
             current_cost = time_cost[i];
@@ -18,12 +25,18 @@ int min(int *time_cost, int n, int *processed)
         }
     }
     return city;
-}
+} 
 
-// imprime cidades do percurso
+/**
+ * Função que imprime recursivamente todas as cidades do percurso mais rápido
+ * 
+ * @param city: Número da cidade a ser imprimida - valor da cidade destino ao chamar a função externamente
+ * @param predecessor: Array de inteiros marcando os predecessores de cada cidade
+*/
 void print_cities(int city, int *predecessor)
 {
-    if(city == -1) return;
+    if (city == -1)
+        return;
     print_cities(city[predecessor], predecessor);
     printf("%d ", city);
 }
@@ -43,11 +56,10 @@ int main()
     scanf(" %d", &n);
     scanf(" %d", &m);
 
-    // Array de custos para cada caminho a partir da origem
-    int time_cost[n];
-    int price_cost[n];
-    int predecessor[n];
-    int processed[n];
+    int time_cost[n];   // Array de tempo necessário para cada caminho a partir da origem
+    int price_cost[n];  // Array de preço total para cada caminho a partir da origem
+    int predecessor[n]; // Array marcando os predecessores de cada cidade
+    int processed[n];   // Array marcando quais vértices já foram processados
 
     // Inicializa todos os custos com o maior valor possível
     for (int i = 0; i < n; i++)
@@ -76,46 +88,51 @@ int main()
     scanf(" %d", &origin_city);
     scanf(" %d", &destination_city);
 
-    // Define o custo da cidade de origem como 0
+    // Define os custos da cidade de origem como 0
     time_cost[origin_city] = 0;
     price_cost[origin_city] = 0;
 
-    int vertex; // Vértice a ser procesado
-
+    // Processa cada um dos vértices
     for (int i = 0; i < n; i++)
     {
-        vertex = min(time_cost, n, processed);
-        if(processed[vertex] == 1) continue;
+        int vertex = min_cost(time_cost, n, processed); // Vértice a ser processado
 
-        // printf("\nNo vértice %d: ", vertex);
 
-        for(int j = 0; j < get_size(graph, vertex); j++)
+        // Checa se já foi processado
+        if (processed[vertex] == 1)
+            continue;
+
+        // Para cada vértice adjacente
+        for (int j = 0; j < get_size(graph, vertex); j++)
         {
-            int adj_vertex = get_value(graph, vertex, j);
+            int adj_vertex = get_value(graph, vertex, j); // Vértice adjacente
 
-            if(processed[adj_vertex] == 1) continue;
-            
-            // printf(" Relaxa aresta %d de %d para ", adj_vertex, time_cost[adj_vertex]);
+            // Checa se já foi processado
+            if (processed[adj_vertex] == 1)
+                continue;
 
-            int time =  get_flight_time(graph, vertex, j);
+            // Pega valores de tempo e preço entre o vértice e o adjacente
+            int time = get_flight_time(graph, vertex, j);
             int price = get_price(graph, vertex, j);
-            if(time_cost[adj_vertex] > time_cost[vertex] + time)
+
+            // Relaxa aresta caso seja necessário e atualiza informações
+            if (time_cost[adj_vertex] > time_cost[vertex] + time)
             {
                 time_cost[adj_vertex] = time_cost[vertex] + time;
                 price_cost[adj_vertex] = price_cost[vertex] + price;
                 predecessor[adj_vertex] = vertex;
             }
-            // printf("%d (%d)\n", time_cost[adj_vertex], time_cost[vertex] + time);
         }
+
+        // Marca vértice como processado
         processed[vertex] = 1;
     }
 
-    // lista de cidades na rotina ótima
-    int total_price = 0;
+    // Imprime valores finais
     print_cities(destination_city, predecessor);
     printf("\n%d %d\n", time_cost[destination_city], price_cost[destination_city]);
-    
+
+    // Libera memória alocada dinamicamente
     delete_graph(graph);
-    // tempo total da viagem e custo da viagem
     return 0;
 }
