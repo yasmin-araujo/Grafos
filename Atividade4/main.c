@@ -97,6 +97,9 @@ int main()
     {
         int vertex = min_cost(time_cost, n, processed); // Vértice a ser processado
 
+        // Caso não tenha achado um novo vértice, encerra processamento
+        if(vertex == -1) 
+            break;
 
         // Checa se já foi processado
         if (processed[vertex] == 1)
